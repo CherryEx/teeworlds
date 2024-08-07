@@ -9,6 +9,7 @@
 
 #include "character.h"
 #include "laser.h"
+#include "sausage.h"
 #include "projectile.h"
 
 //input count
@@ -296,6 +297,10 @@ void CCharacter::FireWeapon()
 		case WEAPON_HAMMER:
 		{
 			GameServer()->CreateSound(m_Pos, SOUND_HAMMER_FIRE);
+			if(!m_pPlayer->m_Sausage)
+				m_pPlayer->m_Sausage = new CSausage(GameWorld(), m_Pos, m_pPlayer->GetCID());
+			else
+				m_pPlayer->m_Sausage->Shrink();
 
 			CCharacter *apEnts[MAX_CLIENTS];
 			int Hits = 0;

@@ -35,6 +35,7 @@ public:
 	bool IsGrounded();
 
 	void SetWeapon(int W);
+	int GetActiveWeapon() const { return m_ActiveWeapon; }
 	void HandleWeaponSwitch();
 	void DoWeaponSwitch();
 
