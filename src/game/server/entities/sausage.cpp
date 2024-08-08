@@ -10,8 +10,9 @@ CSausage::CSausage(CGameWorld* pGameWorld, vec2 Pos, int Owner)
 	: CEntity(pGameWorld, CGameWorld::ENTTYPE_LASER, Pos)
 {
 	m_Owner = Owner;
-	m_StartTick = 0;
+	m_StartTick = Server()->Tick();
 	m_Length = 50.0f;
+	m_SpecialType = SPECIAL_SAUSAGE;
 	GameWorld()->InsertEntity(this);
 }
 
@@ -21,9 +22,7 @@ void CSausage::Tick()
 	CCharacter *pChr = GameServer()->GetPlayerChar(m_Owner);
 	if (pChr && pChr->IsAlive())
 	{
-		// Next line's condition's idea is stolen from fokkonaut's F-DDrace (Just don't want him saying "He took my grog and renamed it to Sausage" :\)
-		bool RightDir = GameWorld()->m_Core.m_apCharacters[m_Owner]->m_Input.m_TargetX >= 0 ? true : false;
-		float CorrectOffset = RightDir ? 30.0f : -30.0f; // Right(30) or Left(-30)
+		float CorrectOffset = pChr->GetDirection() == CCharacter::DIRECTION_RIGHT ? 30.0f : -30.0f; // Right(30) or Left(-30)
 		vec2 pPos = pChr->GetPos();
 		m_From = vec2(pPos.x + CorrectOffset, pPos.y - m_Length);
 		m_Pos = vec2(pPos.x + CorrectOffset, pPos.y + 10.0f);
@@ -31,18 +30,18 @@ void CSausage::Tick()
 	else
 	{
 		if(GameServer()->m_apPlayers[m_Owner])
-			GameServer()->m_apPlayers[m_Owner]->m_Sausage = nullptr;
+			GameServer()->m_apPlayers[m_Owner]->m_SpecialEntity = nullptr;
 		GameWorld()->DestroyEntity(this);
 	}
 }
 
-void CSausage::Shrink()
+void CSausage::Consume()
 {
 	m_Length -= 22.0f;
 	if(m_From.y - m_Length >= m_Pos.y)
 	{
 		CCharacter *pChar = GameServer()->GetPlayerChar(m_Owner);
-		GameServer()->m_apPlayers[m_Owner]->m_Sausage = nullptr;
+		GameServer()->m_apPlayers[m_Owner]->m_SpecialEntity = nullptr;
 		GameServer()->CreateDeath(pChar->GetPos(), m_Owner);
 		pChar->SetEmote(EMOTE_HAPPY, Server()->Tick() + Server()->TickSpeed() * 1.5f);
 		GameServer()->CreateSound(pChar->GetPos(), SOUND_PLAYER_SPAWN);
@@ -72,5 +71,7 @@ void CSausage::Snap(int SnappingClient)
 
 void CSausage::Reset()
 {
+	if(GameServer()->m_apPlayers[m_Owner])
+			GameServer()->m_apPlayers[m_Owner]->m_SpecialEntity = nullptr;
 	GameWorld()->DestroyEntity(this);
 }

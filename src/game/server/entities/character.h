@@ -36,6 +36,7 @@ public:
 
 	void SetWeapon(int W);
 	int GetActiveWeapon() const { return m_ActiveWeapon; }
+	int GetDirection(bool Horizontal = true) const;
 	void HandleWeaponSwitch();
 	void DoWeaponSwitch();
 
@@ -63,6 +64,13 @@ public:
 
 	bool IsAlive() const { return m_Alive; }
 	class CPlayer *GetPlayer() { return m_pPlayer; }
+
+	enum {
+		DIRECTION_RIGHT = 0,
+		DIRECTION_DOWN,
+		DIRECTION_LEFT,
+		DIRECTION_UP
+	};
 
 private:
 	// player controlling this character

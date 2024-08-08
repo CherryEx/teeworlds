@@ -14,6 +14,7 @@ CEntity::CEntity(CGameWorld *pGameWorld, int ObjType, vec2 Pos, int ProximityRad
 
 	m_ID = Server()->SnapNewID();
 	m_ObjType = ObjType;
+	m_SpecialType = -1;
 
 	m_ProximityRadius = ProximityRadius;
 

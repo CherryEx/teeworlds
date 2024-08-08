@@ -104,6 +104,14 @@ void CCharacter::SetWeapon(int W)
 		m_ActiveWeapon = 0;
 	m_aWeapons[m_ActiveWeapon].m_AmmoRegenStart = -1;
 }
+// The condition used in this function is from fokkonaut's F-DDrace (...)
+int CCharacter::GetDirection(bool Horizontal) const
+{
+	if(Horizontal)
+		return m_Core.m_Input.m_TargetX >= 0 ? DIRECTION_RIGHT : DIRECTION_LEFT;
+	else
+		return m_Core.m_Input.m_TargetY >= 0 ? DIRECTION_UP : DIRECTION_DOWN;
+}
 
 bool CCharacter::IsGrounded()
 {
@@ -297,10 +305,10 @@ void CCharacter::FireWeapon()
 		case WEAPON_HAMMER:
 		{
 			GameServer()->CreateSound(m_Pos, SOUND_HAMMER_FIRE);
-			if(!m_pPlayer->m_Sausage)
-				m_pPlayer->m_Sausage = new CSausage(GameWorld(), m_Pos, m_pPlayer->GetCID());
-			else
-				m_pPlayer->m_Sausage->Shrink();
+			if(!m_pPlayer->m_SpecialEntity)
+				m_pPlayer->m_SpecialEntity = new CSausage(GameWorld(), m_Pos, m_pPlayer->GetCID());
+			else if(m_pPlayer->m_SpecialEntity->GetSpecialType() == SPECIAL_SAUSAGE)
+				static_cast<CSausage *>(m_pPlayer->m_SpecialEntity)->Consume();
 
 			CCharacter *apEnts[MAX_CLIENTS];
 			int Hits = 0;

@@ -46,6 +46,7 @@ protected:
 			Contains the current posititon of the entity.
 	*/
 	vec2 m_Pos;
+	int m_SpecialType;
 
 	/* Getters */
 	int GetID() const					{ return m_ID; }
@@ -140,6 +141,14 @@ public:
 	int NetworkClipped(int SnappingClient, vec2 CheckPos);
 
 	bool GameLayerClipped(vec2 CheckPos);
+
+	int GetSpecialType() const { return m_SpecialType; }
+	enum {
+		SPECIAL_SAUSAGE = 0,
+		SPECIAL_BACKPACK, //TODO
+		SPECIAL_DRINK, // TODO
+		SPECIAL_CLOCK // TODO
+	};
 };
 
 #endif

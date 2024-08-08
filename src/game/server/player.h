@@ -112,7 +112,7 @@ public:
 		int m_Max;
 	} m_Latency;
 
-	class CSausage *m_Sausage;
+	CEntity *m_SpecialEntity;
 
 private:
 	CCharacter *m_pCharacter;
