@@ -67,6 +67,8 @@ void CSausage::Snap(int SnappingClient)
 	pObj->m_FromX = round_to_int(m_From.x);
 	pObj->m_FromY = round_to_int(m_From.y);
 	pObj->m_StartTick = m_StartTick;
+	pObj->m_OuterColor = 0xFF8DB3;
+	pObj->m_InnerColor = 0xBA3030;
 }
 
 void CSausage::Reset()
